@@ -9,6 +9,8 @@ const download = new Download({})
 
 const compilerModule = require('./compiler.js')
 const uglifyModule = require('./uglify.js')
+const rollup = require('./rollup.js')
+const pluginRollupNodeResolve = require('@rollup/plugin-node-resolve')
 
 const downloadDependencies = async (asciidoctorCoreDependency) => {
   log.task('download dependencies')
@@ -106,6 +108,8 @@ const generateFlavors = async (asciidoctorCoreTarget, environments) => {
       buffers.push(Buffer.from(header, 'utf8'))
       buffers.push(Buffer.from(content, 'utf8'))
       fs.writeFileSync(target, Buffer.concat(buffers), 'utf8')
+      // use rollup to create a CommonJS-compatible module
+      await rollup.rollup({ input: target, plugins: [pluginRollupNodeResolve.nodeResolve()] }, { format: 'esm', file: 'build/asciidoctor-browser.js' })
     } else {
       fs.writeFileSync(target, content, 'utf8')
     }

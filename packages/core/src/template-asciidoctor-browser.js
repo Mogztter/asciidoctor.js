@@ -1,4 +1,4 @@
-//{{opalCode}}
+import Opal from 'asciidoctor-opal-runtime/src/opal.js'
 
 export default function Asciidoctor(moduleConfig) {
 //{{asciidoctorCode}}
